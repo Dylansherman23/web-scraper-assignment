@@ -1,0 +1,38 @@
+import urllib2, csv
+#importing things to allow the code to work, csv is probably for creating data tables/organizing the data 
+from bs4 import BeautifulSoup
+#importing BeautifulSoup to allow the parsing of the HTML
+
+outfile = open('jaildata.csv', 'w')
+#guessing that this saves the file as a .csv, not sure what the 'w' means 
+writer = csv.writer(outfile)
+#I'm guessing that this is how the code creates the .csv file
+
+url = 'https://report.boonecountymo.org/mrcjava/servlet/SH01_MP.I00290s?max_rows=500'
+#web address for the site that will be scraped 
+html = urllib2.urlopen(url).read()
+#I think this is how python "reads" the website in order to scrape it
+
+soup = BeautifulSoup(html, "html.parser")
+#setting "soup" to equal the BeautifulSoup html.parser
+
+tbody = soup.find('tbody', {'class': 'stripe'})
+#guessing this might have something to do with the 'body' of the "t"able?
+
+rows = tbody.find_all('tr')
+#This is probably a way of selecting all the column heads 
+
+for row in rows:
+#Not really sure what this would do. Obviously something to do with the rows of the table, but I am not sure as to what.
+    cells = row.find_all('td')
+    #I think this is a way of looping cells by selecting them through the loop
+
+    data = []
+    #This might create a space for the data to go?
+    for cell in cells:
+    #A cell for the data to go into
+        data.append(cell.text.encode('utf-8'))
+        #appending data to each row?
+
+    writer.writerow(data)
+    #I'm guessing that this is a way to set the data into rows in a spreadsheet.
